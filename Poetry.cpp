@@ -19,17 +19,21 @@ public:
         
         for(unsigned	int	i=0;	i	<	poem.size();	i++	)
         {
+            //If empty string
             if(poem[i].size()	==	0)
             {
                 rhyme	+=	" ";
             }
-            else	if(isSpaces(poem[i]))
+            else	if(isSpaces(poem[i]))   //if only spaces are present
             {
                 rhyme	+=	" "	;
             }
-            else
+            else    //Finding pattern
             {
-                
+                for(unsigned    int j=i-1;  j   >   =   0;  j--)
+                {
+                    
+                }
             }
         }
     }

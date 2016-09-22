@@ -25,6 +25,15 @@ public:
 
     string	rhymeScheme(vector<string> poem)
     {
+        //convert all to lower case letters
+        for(unsigned    int i=0;i<poem.size();i++)
+        {
+            for(unsigned    int j=0;    j<poem[i].size();   j++)
+            {
+                poem[i][j]  =   (char)tolower(poem[i][j]);
+            }
+        }
+        
         string	rhyme	=	"";
         string	charSet	=	"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         unsigned	int	symbolLocation	=	0;
@@ -51,7 +60,7 @@ public:
                 }
 
                 //For each line x, compare x with all previous line for patterns
-                for(int j=i-1;  j   >=   0;  j--)
+                for(int j=i-1;  j   >=   0  &&  !pattern_found;  j--)
                 {
                     //if previuos lines are not empty or full of spaces
                     if(poem[j].size()   !=  0   &&  (!isSpaces(poem[j]))    )
@@ -59,6 +68,9 @@ public:
                         int x   =   poem[i].size()-1;
                         int y   =   poem[j].size()-1;
 
+                        while(x >=  0   &&  poem[i][x]  ==  ' ')    x--;
+                        while(y >=  0   &&  poem[j][y]  ==  ' ')    y--;
+                        
                         //gets the location till which the last words match
                         while(x >=    0   &&  y   >=  0   &&  (poem[i][x] ==  poem[j][y])   &&  (poem[i][x] !=  ' ' &&  poem[j][y]  !=  ' '))
                         {
@@ -79,17 +91,13 @@ public:
 
                             string  start_letter(1,pattern1[0]);
 
-                            string  nonvowel_start(poem[i],(x),poem[i].size());
+                            string  prestart(1,poem[i][x]);
 
                             //check if it is a legal word and has a non-vowel starting letter before pattern
-                            if(containsVowel(pattern1)   &&  containsVowel(start_letter)  )
+                            if(containsVowel(pattern1)   &&  containsVowel(start_letter)  &&    !containsVowel(prestart))
                             {
-                                if(j    ==  0)
-                                {
-                                    rhyme   +=  charSet[symbolLocation++];
-                                }
-                                else
-                                    rhyme   +=  rhyme[j];
+                                rhyme   +=  rhyme[j];
+
                             }
                             else
                             {
@@ -109,15 +117,3 @@ public:
 
 
 };
-
-int main(int    argc,char   *argv[])
-{
-    vector<string>  poem;
-    poem.push_back("I hope this problem");
-    poem.push_back("is a whole lot better than");
-    poem.push_back("this stupid haiku");
-
-    Poetry rhyme;
-    std::cout << rhyme.rhymeScheme(poem)    <<  '\n';
-    return 0;
-}

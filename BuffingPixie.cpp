@@ -1,4 +1,4 @@
-//Problem is of Simulation category
+//Problem is of Simulation type and Hard Category
 
 #include <iostream>
 using namespace std;

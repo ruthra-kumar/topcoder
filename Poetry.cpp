@@ -1,3 +1,4 @@
+//Problem is of string manipulation type and Hard category
 #include <bits/stdc++.h>
 using namespace std;
 class	Poetry

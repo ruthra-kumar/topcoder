@@ -1,3 +1,5 @@
+//Problem is of Simulation category
+
 #include <iostream>
 using namespace std;
 

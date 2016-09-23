@@ -1,3 +1,4 @@
+//Problem is of Dynamic Programming type and Hard Category
 #include <iostream>
 #include <vector>
 #include <queue>

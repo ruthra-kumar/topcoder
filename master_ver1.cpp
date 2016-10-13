@@ -6,6 +6,16 @@
 
 using namespace std;
 
+int colCount[MAX_COL];
+int Score[MAX_LEN];
+
+enum    Mode
+{
+    GUESS_COLOR,
+    GUESS_PATTERN,
+    VERIFY
+};
+
 void    Print(vector<int>   a)
 {
     for(auto &x:a)
@@ -14,13 +24,13 @@ void    Print(vector<int>   a)
     }
 }
 
+
 class MasterMind
 {
     public:
-        int     Mode    =   0;                  //  0   -   GuessColor  ,   1   -   GuessPattern,   2   -   Verify
+        Mode state;
         int     cols,len,colorCheck   =   0,totalHits   =   0;
-        int     colCount[MAX_COL];
-        short   Score[MAX_LEN];
+        vector<int> base;
 
         vector<int> init(int    k,int   l)
         {
@@ -34,14 +44,14 @@ class MasterMind
             }
 
             totalHits =   0;
-            Mode    =   0;
-            
+            state   =   GUESS_COLOR;
+
             cols    =   k;
             len     =   l;
 
             return  vector<int>(len,colorCheck++);
         }
-        
+
         /*
         void    next_pos(vector<int>    prev)
         {
@@ -61,64 +71,55 @@ class MasterMind
                     y   =   0;
                 }
             }while(Score[y] ==  2);
-            
+
         }
         */
-        
+
         vector<int> Verify(vector<int> prev,vector<int>  results)
         {
             return  prev;
         }
-        
-        vector<int> guessPattern(vector<int> prev,vector<int>  results)
+
+        vector<int> guessPattern(vector<int> pr,vector<int>  rs)
         {
-            vector<int> next;
-            
-            for(int i=0;    i   <   MAX_COL;    i++)
-            {
-                for(int j   =   0;  j   <   colCount[i];j++)
-                {
-                    next.push_back(i);                    
-                }
-            }
-            Print(next);
+            vector<int> next(0,len);
+
             return  next;
         }
-        
-        vector<int> guessColor(vector<int> prev,vector<int>  results)
+
+        vector<int> guessColor(vector<int> pre,vector<int>  res)
         {
-            cout    <<  totalHits <<  '\n';
+            cout    <<  totalHits   <<  "   "   <<  len <<  '\n';
             if(totalHits    ==  len)
             {
-                Mode    =   1;
-                return  guessPattern(prev, results);
+                state   =   GUESS_PATTERN;
+                cout    <<  "Generating base"   <<  '\n';
+                cout    <<  colCount[0] <<  '\n' ;
+                cout    <<  "Base Generated"    <<  '\n';
+
+                return  guessPattern(pre, res);
             }
-            totalHits   +=   results[0];
+            totalHits   +=   res[0];
             return  vector<int>(len,colorCheck++);
         }
-        
+
         vector<int> nextGuess(vector<int> prev,vector<int>  results)
         {
             vector<int> next(cols,0);
-            guessColor();
-            switch(Mode)
+
+            if(state    ==  GUESS_COLOR)
             {
-                case    0:
-                //next    =   guessColor(prev,results);
-                //  Print(next);
-                break;
-                
-                case    1:
-                //next    =   guessPattern(prev,results);
-                break;
-                
-                case    2:
-                //next    =   Verify(prev,results);
-                break;
-                
-                default:break;
+                next    =   guessColor(prev,results);
             }
-            
+            else    if(state ==  GUESS_PATTERN)
+            {
+                next    =   guessPattern(prev,results);
+            }
+            else    if(state    ==  VERIFY)
+            {
+                next    =   Verify(prev,results);
+            }
+
             return  next;
         }
 };
@@ -136,7 +137,7 @@ int main()
 
     for(int i=0;i<40;i++)
     {
-        Print(guess);
+        //Print(guess);
 
         for(int i=0;    i<l  ;i++)
         {
@@ -164,7 +165,7 @@ int main()
             }
         }
 
-        cout    <<" || "    <<  results[0]  << " "  <<  results[1]  <<  '\n';
+        //cout    <<" || "    <<  results[0]  << " "  <<  results[1]  <<  '\n';
         //cin.get();
         guess   =   myguess.nextGuess(guess,results);
     }
